@@ -1,23 +1,17 @@
 import React, { useState } from 'react';
 import ReactMarkdown from "react-markdown";
-import { customTurndownService } from './turndownService';
 import { load } from 'cheerio';
-import { htmlToText } from 'html-to-text';
-
-import './index.css'; // Ensure this is the correct path
-
+import TypingEffect from './TypingEffect';
+import './index.css';
 
 const App = () => {
   const [messages, setMessages] = useState<{ text: string; sender: string }[]>([]);
   const [userInput, setUserInput] = useState<string>('');
-  const [finalBodyContent, setFinalBodyContent] = useState<string>('');
-  const turndownService = customTurndownService;
 
   function extractAllowedHtml(html: string, allowedTags: string[]): string {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
-  
-    // Create a TreeWalker to traverse all element nodes in the body
+
     const walker = document.createTreeWalker(
       doc.body,
       NodeFilter.SHOW_ELEMENT,
@@ -29,107 +23,135 @@ const App = () => {
         }
       }
     );
-  
+
     const result: string[] = [];
     let currentNode = walker.nextNode();
     while (currentNode) {
-      // Only add the node if its parent is not allowed
       const parent = (currentNode as HTMLElement).parentElement;
       if (!parent || !allowedTags.includes(parent.tagName.toLowerCase())) {
         result.push((currentNode as HTMLElement).outerHTML);
       }
       currentNode = walker.nextNode();
     }
-  
-    return result.join('\n\n');
+
+    return result.join('');
   }
 
   function addTailwindClasses(html: string): string {
     const $ = load(html);
-    $('p').addClass('mb-4 text-base text-gray-700');
-    $('a').addClass('text-blue-500 hover:underline');
-    // ... add classes to other tags as needed
+
+    $('p').each((_, el) => {
+      $(el)
+        .removeClass()
+        .addClass('mb-4 text-base text-gray-200');
+    });
+
+    $('ul').each((_, el) => {
+      $(el)
+        .removeClass()
+        .addClass('list-disc pl-5 mb-4 text-gray-200');
+    });
+
+    $('li').each((_, el) => {
+      $(el)
+        .removeClass()
+        .addClass('mb-1 text-gray-200');
+    });
+
+    $('a').each((_, el) => {
+      $(el)
+        .removeClass()
+        .addClass('text-blue-400 hover:underline');
+    });
+
+    $('strong').each((_, el) => {
+      $(el)
+        .removeClass()
+        .addClass('font-bold text-white');
+    });
+
     return $.html();
   }
 
   const sendMessage = async () => {
-    // Adding the user's message
     const userMessage = { text: userInput, sender: 'user' };
     setMessages([...messages, userMessage]);
     setUserInput('');
 
-    // Call to the backend API to send the user message to AI and get a response
     try {
       const response = await fetch(`http://localhost:5000/askGPT/${encodeURIComponent(userInput)}`);
       let data = await response.text();
-      data = data.slice(1, -1)
+      data = data.slice(1, -1);
 
-      const allowed = ['p', 'section', 'strong', 'a', 'ul', 'li'];
-      const extractedHtml = extractAllowedHtml(data, allowed);      
-      
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = extractedHtml;
+      const allowedTags = ['p', 'strong', 'a', 'ul', 'li', 'section'];
+      const extractedHtml = extractAllowedHtml(data, allowedTags);
+      let bodyContent = extractedHtml
+        .replace(/\\n/g, '\n')
+        .replace(/<style[\s\S]*?<\/style>/gi, '')
+        .replace(/\\&quot;/g, '"');
 
-      let bodyContent = tempDiv.innerHTML.trim();
-
-      bodyContent = bodyContent.replace(/\\n/g, '\n'); // Replace escaped newlines with actual newlines
-      bodyContent = bodyContent.replace(/<style[\s\S]*?<\/style>/gi, '').trim();
-      bodyContent = bodyContent.replace(/\\&quot;/g, '"');
-      bodyContent = bodyContent.replace(/href=""(.*?)""/g, 'href="$1"');
       bodyContent = addTailwindClasses(bodyContent);
 
       console.log(bodyContent);
 
-      // Adding the AI's response
-      const aiMessage = { text: bodyContent, sender: 'ai' };
-      setFinalBodyContent(bodyContent);
-      setMessages((prevMessages) => [...prevMessages, aiMessage]);
+      setMessages((prev) => [...prev, { text: bodyContent, sender: 'ai' }]);
     } catch (error) {
       console.error('Error fetching AI response:', error);
     }
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100 p-4">
-    {/* Chat Window */}
-    <div className="flex-1 overflow-auto p-4 bg-white rounded-lg shadow-lg space-y-4">
-      {messages.map((message, index) => (
-        <div 
-          key={index} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-
-          <div
-            className={`w-fit max-w-[75%] p-3 rounded-lg whitespace-pre-wrap break-words
-              ${message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
-          >
-            {message.sender === 'user' ? (
-              <ReactMarkdown>{message.text}</ReactMarkdown>
-            ) : (
+    <div className="flex h-screen bg-gray-900">
+      {/* Sidebar */}
+      <div className="w-[30%] p-6 bg-gray-800 text-white">
+        <h1 className="text-3xl font-bold mb-4">CToledo GPT</h1>
+        <p className="text-lg">This sidebar can contain navigation, info, or settings.</p>
+      </div>
+      
+      {/* Chat Area */}
+      <div className="w-[70%] flex flex-col p-4">
+        {/* Chat Window */}
+        <div className="flex-1 overflow-auto p-4 bg-gray-800 rounded-lg shadow-lg space-y-4">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
               <div
-                dangerouslySetInnerHTML={{
-                  __html: finalBodyContent, // assuming finalBodyContent is sanitized and contains HTML
-                }}
-              />
-            )}
-          </div>
+                className={`${
+                  message.sender === 'user' ? 'w-fit' : 'w-[75%]'
+                } p-3 rounded-lg whitespace-pre-wrap break-words ${
+                  message.sender === 'user'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-700 text-gray-100'
+                }`}
+              >
+                {message.sender === 'user' ? (
+                  <ReactMarkdown>{message.text}</ReactMarkdown>
+                ) : (
+                  <TypingEffect text={message.text} />
+                )}
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-  
-      {/* Input Section */}
-      <div className="mt-4 flex space-x-2">
-        <input
-          type="text"
-          className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Type a message..."
-        />
-        <button
-          onClick={sendMessage}
-          className="p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
-        >
-          Send
-        </button>
+
+        {/* Input Section */}
+        <div className="mt-4 flex space-x-2">
+          <input
+            type="text"
+            className="flex-1 p-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            placeholder="Type a message..."
+          />
+          <button
+            onClick={sendMessage}
+            className="p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition duration-200"
+          >
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );
