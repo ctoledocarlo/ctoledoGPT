@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import ReactMarkdown from "react-markdown";
 import { customTurndownService } from './turndownService';
 import { load } from 'cheerio';
+import { htmlToText } from 'html-to-text';
+
 import './index.css'; // Ensure this is the correct path
 
 
 const App = () => {
   const [messages, setMessages] = useState<{ text: string; sender: string }[]>([]);
   const [userInput, setUserInput] = useState<string>('');
+  const [finalBodyContent, setFinalBodyContent] = useState<string>('');
   const turndownService = customTurndownService;
 
   function extractAllowedHtml(html: string, allowedTags: string[]): string {
@@ -74,13 +77,12 @@ const App = () => {
       bodyContent = bodyContent.replace(/\\&quot;/g, '"');
       bodyContent = bodyContent.replace(/href=""(.*?)""/g, 'href="$1"');
       bodyContent = addTailwindClasses(bodyContent);
-      bodyContent = turndownService.turndown(bodyContent);
 
       console.log(bodyContent);
 
-
       // Adding the AI's response
       const aiMessage = { text: bodyContent, sender: 'ai' };
+      setFinalBodyContent(bodyContent);
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
     } catch (error) {
       console.error('Error fetching AI response:', error);
@@ -95,11 +97,19 @@ const App = () => {
         <div 
           key={index} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
 
-          <div className={`w-fit max-w-[75%] p-3 rounded-lg whitespace-pre-wrap break-words
-            ${message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}>
-            
-            <ReactMarkdown>{message.text}</ReactMarkdown>
-
+          <div
+            className={`w-fit max-w-[75%] p-3 rounded-lg whitespace-pre-wrap break-words
+              ${message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
+          >
+            {message.sender === 'user' ? (
+              <ReactMarkdown>{message.text}</ReactMarkdown>
+            ) : (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: finalBodyContent, // assuming finalBodyContent is sanitized and contains HTML
+                }}
+              />
+            )}
           </div>
         </div>
       ))}
