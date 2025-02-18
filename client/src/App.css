@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .link {
+        @apply text-blue-500 underline;
+    }
+}
