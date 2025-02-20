@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ReactMarkdown from "react-markdown";
 import { load } from 'cheerio';
 import TypingEffect from './TypingEffect';
@@ -41,46 +41,45 @@ const App = () => {
   function addTailwindClasses(html: string): string {
     const $ = load(html);
 
-    $('p').each((_, el) => {
+    $('p').each((_: number, el: any) => {
       $(el)
         .removeClass()
         .addClass('mb-4 text-base text-gray-200');
     });
 
-    $('ul').each((_, el) => {
+    $('ul').each((_: number, el: any) => {
       $(el)
         .removeClass()
         .addClass('list-disc pl-5 mb-4 text-gray-200');
     });
 
-    $('li').each((_, el) => {
+    $('li').each((_: number, el: any) => {
       $(el)
         .removeClass()
         .addClass('text-gray-200');
     });
 
-    $('a').each((_, el) => {
+    $('a').each((_: number, el: any) => {
       const $el = $(el);
       let href = $el.attr('href');
       
       if (href) {
-        href = href.replace(/=""\s+/g, '')  // Remove empty quotes and spaces
-                   .replace(/""=/g, '')      // Remove reversed empty quotes
-                   .replace(/\s+/g, '');     // Remove any remaining spaces
+        href = href.replace(/=""\s+/g, '')
+                   .replace(/""=/g, '')
+                   .replace(/\s+/g, '');
       }
       
       $el.removeClass()
          .addClass('text-blue-400 hover:underline')
-         .attr('href', href);
+         .attr('href', href || '');
     });
 
-    $('strong').each((_, el) => {
+    $('strong').each((_: number, el: any) => {
       $(el)
         .removeClass()
         .addClass('font-bold text-white');
     });
 
-    // Remove extra whitespace between elements
     return $.html().replace(/>\s+</g, '><');
   }
 
@@ -91,7 +90,7 @@ const App = () => {
     setIsThinking(true);
 
     try {
-      const response = await fetch("https://ctoledogpt.onrender.com/askGPT", {
+      const response = await fetch("https://ctoledogpt-backend.onrender.com/askGPT", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

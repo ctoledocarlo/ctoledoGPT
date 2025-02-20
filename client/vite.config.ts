@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      "/api": "https://ctoledogpt.onrender.com",
+      "/api": "https://ctoledogpt-backend.onrender.com",
     },
   },
 });
