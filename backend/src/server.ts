@@ -25,6 +25,7 @@ app.get("/api", (req, res) => {
 
 app.get("/ping", (req, res) => {
     res.status(200).send("Server is alive!");
+    console.log("Server is alive!");
 });
 
 app.get("/ask/:prompt", async (req, res) => {
