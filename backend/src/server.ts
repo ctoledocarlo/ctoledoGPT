@@ -23,6 +23,10 @@ app.get("/api", (req, res) => {
   res.send("Backend is running...");
 });
 
+app.get("/ping", (req, res) => {
+    res.status(200).send("Server is alive!");
+});
+
 app.get("/ask/:prompt", async (req, res) => {
     const { prompt } = req.params; 
 
