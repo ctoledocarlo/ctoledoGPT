@@ -14,6 +14,8 @@ const openai = new OpenAI();
 const app = express();
 const PORT = process.env.PORT ?? 5000;
 
+const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [{ role: "system", content: information }]
+
 app.use(cors());
 app.use(express.json());
 
@@ -40,15 +42,16 @@ app.get("/ask/:prompt", async (req, res) => {
     }
 });
 
-app.get("/askGPT/:prompt", async (req, res) => {
-    const { prompt } = req.params; 
+app.post("/askGPT", async (req, res) => {
+    const { interaction } = req.body; 
+
+    messages.push(interaction);
 
     try {
         const completion = await openai.chat.completions.create({
             store: true,
             model: "gpt-4o-mini",
-            messages: [{ role: "system", content: information }, 
-                       { role: "user", content: prompt }]
+            messages: messages
             }, {
             headers: {
                 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
