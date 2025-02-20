@@ -8,7 +8,6 @@ const App = () => {
   const [messages, setMessages] = useState<{ text: string; sender: string }[]>([]);
   const [userInput, setUserInput] = useState<string>('');
   const [isThinking, setIsThinking] = useState<boolean>(false);
-  // const [messageMemory, setMessageMemory] = useState<string>('');
 
   function extractAllowedHtml(html: string, allowedTags: string[]): string {
     const parser = new DOMParser();
@@ -92,7 +91,7 @@ const App = () => {
     setIsThinking(true);
 
     try {
-      const response = await fetch("http://localhost:5000/askGPT", {
+      const response = await fetch("https://ctoledogpt.onrender.com/askGPT", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
