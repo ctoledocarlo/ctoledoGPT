@@ -7,6 +7,8 @@ import './index.css';
 const App = () => {
   const [messages, setMessages] = useState<{ text: string; sender: string }[]>([]);
   const [userInput, setUserInput] = useState<string>('');
+  const [isThinking, setIsThinking] = useState<boolean>(false);
+  // const [messageMemory, setMessageMemory] = useState<string>('');
 
   function extractAllowedHtml(html: string, allowedTags: string[]): string {
     const parser = new DOMParser();
@@ -55,13 +57,22 @@ const App = () => {
     $('li').each((_, el) => {
       $(el)
         .removeClass()
-        .addClass('mb-1 text-gray-200');
+        .addClass('text-gray-200');
     });
 
     $('a').each((_, el) => {
-      $(el)
-        .removeClass()
-        .addClass('text-blue-400 hover:underline');
+      const $el = $(el);
+      let href = $el.attr('href');
+      
+      if (href) {
+        href = href.replace(/=""\s+/g, '')  // Remove empty quotes and spaces
+                   .replace(/""=/g, '')      // Remove reversed empty quotes
+                   .replace(/\s+/g, '');     // Remove any remaining spaces
+      }
+      
+      $el.removeClass()
+         .addClass('text-blue-400 hover:underline')
+         .attr('href', href);
     });
 
     $('strong').each((_, el) => {
@@ -70,16 +81,25 @@ const App = () => {
         .addClass('font-bold text-white');
     });
 
-    return $.html();
+    // Remove extra whitespace between elements
+    return $.html().replace(/>\s+</g, '><');
   }
 
   const sendMessage = async () => {
     const userMessage = { text: userInput, sender: 'user' };
     setMessages([...messages, userMessage]);
     setUserInput('');
+    setIsThinking(true);
 
     try {
-      const response = await fetch(`http://localhost:5000/askGPT/${encodeURIComponent(userInput)}`);
+      const response = await fetch("http://localhost:5000/askGPT", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ interaction: { role: "user", content: userInput } }),
+      });
+
       let data = await response.text();
       data = data.slice(1, -1);
 
@@ -97,6 +117,8 @@ const App = () => {
       setMessages((prev) => [...prev, { text: bodyContent, sender: 'ai' }]);
     } catch (error) {
       console.error('Error fetching AI response:', error);
+    } finally {
+      setIsThinking(false);
     }
   };
 
@@ -134,6 +156,13 @@ const App = () => {
               </div>
             </div>
           ))}
+          {isThinking && (
+            <div className="flex justify-start">
+              <div className="w-[75%] p-3 rounded-lg bg-gray-700 text-gray-100">
+                Thinking...
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Input Section */}
@@ -144,6 +173,11 @@ const App = () => {
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             placeholder="Type a message..."
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && userInput.trim()) {
+                sendMessage();
+              }
+            }}
           />
           <button
             onClick={sendMessage}
