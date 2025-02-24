@@ -5,7 +5,11 @@
     purge: [],
     darkMode: true, // or 'media' or 'class'
     theme: {
-      extend: {},
+      extend: {
+        screens: {
+          'xl+': '1400px',  // Custom breakpoint
+        },
+      },
     },
     variants: {
       extend: {},

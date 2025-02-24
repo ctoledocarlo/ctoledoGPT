@@ -9,6 +9,8 @@ const App = () => {
   const [userInput, setUserInput] = useState<string>('');
   const [isThinking, setIsThinking] = useState<boolean>(false);
 
+  const [menuOpen, setMenuOpen] = useState(false);
+
   function extractAllowedHtml(html: string, allowedTags: string[]): string {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
@@ -121,15 +123,18 @@ const App = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-900">
-      {/* Sidebar */}
-      <div className="w-[30%] p-6 bg-gray-800 text-white">
-        <h1 className="text-3xl font-bold mb-4">CToledo GPT</h1>
-        <p className="text-lg">This sidebar can contain navigation, info, or settings.</p>
+    <div className="flex flex-col min-h-screen">
+      <div className="w-full bg-gray-800 text-white p-4 flex items-center justify-between">
+        <div className="flex items-center space-x-3 md:px-15">
+          <img src="/CToledoLogo.png" alt="Logo" className="h-10 w-10" /> 
+          <h1 className="text-2xl font-bold">CToledo GPT</h1>
+          <a href="https://github.com/ctoledocarlo/ctoledoGPT/" target='_blank' className="hover:font-bold md:ml-83 text-l">Carlo Toledo @ Github</a>
+        </div>
       </div>
-      
+
       {/* Chat Area */}
-      <div className="w-[70%] flex flex-col p-4">
+      <div className="w-full flex flex-col p-4 md:p-20 flex-1 bg-gray-900">
+
         {/* Chat Window */}
         <div className="flex-1 overflow-auto p-4 bg-gray-800 rounded-lg shadow-lg space-y-4">
           {messages.map((message, index) => (
