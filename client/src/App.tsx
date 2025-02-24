@@ -9,8 +9,6 @@ const App = () => {
   const [userInput, setUserInput] = useState<string>('');
   const [isThinking, setIsThinking] = useState<boolean>(false);
 
-  const [menuOpen, setMenuOpen] = useState(false);
-
   function extractAllowedHtml(html: string, allowedTags: string[]): string {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
