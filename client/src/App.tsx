@@ -121,7 +121,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-900">
       <div className="w-full bg-gray-800 text-white p-4 flex items-center justify-between">
         <div className="flex items-center space-x-3 md:px-15">
           <img src="/CToledoLogo.png" alt="Logo" className="h-10 w-10" /> 
