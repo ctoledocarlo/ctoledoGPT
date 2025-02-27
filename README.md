@@ -12,8 +12,6 @@
 
 **CToledo GPT** is an AI-powered virtual assistant designed to help you learn about Carlo Toledo's professional background and expertise. Built with a focus on creating meaningful connections with potential employers and colleagues, this interactive tool provides instant access to Carlo's experience, projects, skills, and educational background.
 
-![CToledo GPT Screenshot](https://via.placeholder.com/800x400?text=CToledo+GPT+Interface)
-
 ## ✨ Features
 
 - **AI-Powered Conversations**: Engage in natural dialogue about Carlo's professional journey
@@ -63,10 +61,6 @@ CToledo GPT uses OpenAI's GPT-4o-mini to process user queries and generate infor
 - **Networking Contacts**: Get a comprehensive understanding of Carlo's professional background
 - **Anyone Interested**: Discover Carlo's skills and experience in an interactive way
 
-## 👨‍💻 About the Creator
-
-This project was created by Carlo Toledo, a Software Engineering Technology student at Centennial College. With experience in full-stack development, data analysis, and machine learning, Carlo built this AI assistant to showcase both his technical abilities and professional background.
-
 ## 📞 Contact
 
 If you'd like to connect with Carlo directly:
@@ -76,5 +70,5 @@ If you'd like to connect with Carlo directly:
 ---
 
 <div align="center">
-  <p>Made with ❤️ by Carlo Toledo</p>
+  <p>Carlo Toledo</p>
 </div>
