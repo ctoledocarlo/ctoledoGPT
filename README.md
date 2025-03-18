@@ -10,14 +10,14 @@
 
 ## 🤖 Overview
 
-**CToledo GPT** is an AI-powered virtual assistant designed to help you learn about Carlo Toledo's professional background and expertise. Built with a focus on creating meaningful connections with potential employers and colleagues, this interactive tool provides instant access to Carlo's experience, projects, skills, and educational background.
+**CToledo GPT** is an AI-powered virtual assistant designed to help you learn about my professional background and expertise. Built with a focus on creating meaningful connections with potential employers and colleagues, this interactive tool provides instant access to my experience, projects, skills, and educational background.
 
 ## ✨ Features
 
-- **AI-Powered Conversations**: Engage in natural dialogue about Carlo's professional journey
+- **AI-Powered Conversations**: Engage in natural dialogue about my professional journey
 - **Professional Portfolio Access**: Explore details about work experience, technical skills, and project accomplishments
-- **Educational Background**: Learn about Carlo's academic qualifications and specialized training
-- **Technical Showcase**: Demonstrates Carlo's proficiency in modern web development technologies
+- **Educational Background**: Learn about my academic qualifications and specialized training
+- **Technical Showcase**: Demonstrates my proficiency in modern web development technologies
 - **Responsive Design**: Optimized for both desktop and mobile devices
 
 ## 🛠️ Tech Stack
@@ -39,16 +39,16 @@ No installation is required! You can interact with CToledo GPT directly through 
 
 1. **Visit the live demo**: [https://ctoledogpt.onrender.com/](https://ctoledogpt.onrender.com/)
 2. **Start asking questions**: Type your query in the chat interface
-3. **Explore Carlo's background**: Focus on professional experience, projects, or skills
+3. **Explore my background**: Focus on professional experience, projects, or skills
 
 ## 💬 Example Interactions
 
 Try asking:
-- "What projects has Carlo worked on?"
-- "Tell me about Carlo's experience with machine learning"
-- "What technologies is Carlo proficient in?"
-- "Where did Carlo receive his education?"
-- "What are Carlo's key strengths?"
+- "What projects have you worked on?"
+- "Tell me about your experience with machine learning"
+- "What technologies are you proficient in?"
+- "Where did you receive your education?"
+- "What are your key strengths?"
 
 ## 🔍 How It Works
 
@@ -56,14 +56,14 @@ CToledo GPT uses OpenAI's GPT-4o-mini to process user queries and generate infor
 
 ## 🌐 Use Cases
 
-- **Recruiters**: Quickly assess Carlo's fit for job opportunities
-- **Potential Collaborators**: Learn about Carlo's technical expertise and project history
-- **Networking Contacts**: Get a comprehensive understanding of Carlo's professional background
-- **Anyone Interested**: Discover Carlo's skills and experience in an interactive way
+- **Recruiters**: Quickly assess my fitness for job opportunities
+- **Potential Collaborators**: Learn about my technical expertise and project history
+- **Networking Contacts**: Get a comprehensive understanding of my professional background
+- **Anyone Interested**: Discover my skills and experience in an interactive way
 
 ## 📞 Contact
 
-If you'd like to connect with Carlo directly:
+If you'd like to connect with me directly:
 - **Email**: [ctoledocarlo@gmail.com](mailto:ctoledocarlo@gmail.com)
 - **LinkedIn**: [ctoledocarlo](https://www.linkedin.com/in/ctoledocarlo/)
 
