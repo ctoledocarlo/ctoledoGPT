@@ -28,24 +28,24 @@ app.get("/ping", (req, res) => {
     console.log("Server is alive!");
 });
 
-app.get("/ask/:prompt", async (req, res) => {
-    const { prompt } = req.params; 
+// app.get("/ask/:prompt", async (req, res) => {
+//     const { prompt } = req.params; 
 
-    try {
-        const response = await axios.post("https://text.pollinations.ai/", {
-            messages: [ { role: 'user', content: prompt },
-                        { role: 'system', content: information}
-            ],
-            model: 'openai-large', 
-            private: true,    
-            seed: 42
-        });     
-        res.json(response.data); 
-    }
-    catch (error){
-        console.log("Error: ", error);
-    }
-});
+//     try {
+//         const response = await axios.post("https://text.pollinations.ai/", {
+//             messages: [ { role: 'user', content: prompt },
+//                         { role: 'system', content: information}
+//             ],
+//             model: 'openai-large', 
+//             private: true,    
+//             seed: 42
+//         });     
+//         res.json(response.data); 
+//     }
+//     catch (error){
+//         console.log("Error: ", error);
+//     }
+// });
 
 app.post("/askGPT", async (req, res) => {
     const { interaction } = req.body; 

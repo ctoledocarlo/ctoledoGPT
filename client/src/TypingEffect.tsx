@@ -1,29 +1,44 @@
 import React, { useState, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 
 interface TypingEffectProps {
   text: string;
   speed?: number;
+  onComplete?: () => void;
+  onTypingStart?: () => void;
+  onTyping?: () => void;
 }
 
-const TypingEffect: React.FC<TypingEffectProps> = ({ text, speed = 10 }) => {
-  const [displayedText, setDisplayedText] = useState<string>("");
-  const [index, setIndex] = useState<number>(0);
+const TypingEffect: React.FC<TypingEffectProps> = ({
+  text,
+  speed = 10,
+  onComplete,
+  onTypingStart,
+  onTyping,
+}) => {
+  const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
     if (!text) return;
 
-    setDisplayedText(""); // Reset on new input
-    setIndex(0);
+    onTypingStart?.();
+    setDisplayedText("");
+    let currentIndex = 0;
 
     const interval = setInterval(() => {
-      setDisplayedText((prev) => text.slice(0, prev.length + 1));
-      setIndex((prevIndex) => prevIndex + 1);
+      if (currentIndex >= text.length) {
+        clearInterval(interval);
+        onComplete?.();
+        return;
+      }
 
-      if (index >= text.length - 1) clearInterval(interval);
+      setDisplayedText(text.slice(0, currentIndex + 1));
+      onTyping?.(); // Call scroll on every character render
+      currentIndex++;
     }, speed);
 
     return () => clearInterval(interval);
-  }, [text]);
+  }, [text, speed, onComplete]);
 
   return <div dangerouslySetInnerHTML={{ __html: displayedText }} />;
 };
