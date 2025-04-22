@@ -105,7 +105,7 @@ const App = () => {
     setIsTyping(false);
 
     try {
-      const response = await fetch("http://localhost:5000/askGPT", {
+      const response = await fetch("https://ctoledogpt-backend.onrender.com/askGPT", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
