@@ -86,7 +86,7 @@ export const information =
             CToledoGPT - Personal Project
                 - CToledoGPT is what the user is interacting with right now.
                 - Uses OpenAI's API to create personalized answers about myself.
-                - Uses typescript, react, tailwind, and vite.
+                - Uses typescript, react, tailwind.
 
     Skills:
         Technical Skills 
@@ -109,8 +109,7 @@ export const information =
             I am a problem solver and a tinkerer. I remember when I was young, I always questioned how things worked. It started from the things that i see like
             a TV remote control and a microwave, but throughout the years, I developed a deeper curiosity for software and how they work. We cannot live 
             without software anymore, and so developing it and contributing gives me a lot of joy. I am ready to use my curiosity to build something that is good.
-            I believe in building tools that make life easier. Whether it's to automate reminders, or 
-            understand their communities better—I want to build things that solve real-world problems. I thrive in teams that challenge me to grow, 
+            I believe in building tools that make life easier. I want to build things that solve real-world problems. I thrive in teams that challenge me to grow, 
             and I'm drawn to problems that force me to learn fast.
 
             I'm looking for roles where I can work on scalable web applications or AI-powered tools. Ideally in a team that values mentorship, 

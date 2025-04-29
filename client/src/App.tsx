@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import TypingEffect from './TypingEffect';
 import './index.css';
 import { load } from 'cheerio';
+import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
   const [messages, setMessages] = useState<{ text: string; sender: string }[]>([]);
@@ -11,6 +12,7 @@ const App = () => {
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const sessionId = uuidv4();
 
   function extractAllowedHtml(html: string, allowedTags: string[]): string {
     const parser = new DOMParser();
@@ -86,13 +88,12 @@ const App = () => {
     return $.html().replace(/>\s+</g, '><');
   }
 
-  // Auto-scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages, isThinking]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView();
   };
 
   const sendMessage = async () => {
@@ -110,7 +111,10 @@ const App = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ interaction: { role: "user", content: userInput } }),
+        body: JSON.stringify({ 
+          interaction: { role: "user", content: userInput },
+          sessionId: sessionId
+        }),
       });
       
       let data = await response.text();

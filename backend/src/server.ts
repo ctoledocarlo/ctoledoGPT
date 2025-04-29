@@ -14,7 +14,8 @@ const openai = new OpenAI();
 const app = express();
 const PORT = process.env.PORT ?? 5000;
 
-const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [{ role: "system", content: information }]
+// Replace the single messages array with a Map to store multiple message histories
+const messageHistories = new Map<string, OpenAI.Chat.Completions.ChatCompletionMessageParam[]>();
 
 app.use(cors());
 app.use(express.json());
@@ -28,28 +29,15 @@ app.get("/ping", (req, res) => {
     console.log("Server is alive!");
 });
 
-// app.get("/ask/:prompt", async (req, res) => {
-//     const { prompt } = req.params; 
-
-//     try {
-//         const response = await axios.post("https://text.pollinations.ai/", {
-//             messages: [ { role: 'user', content: prompt },
-//                         { role: 'system', content: information}
-//             ],
-//             model: 'openai-large', 
-//             private: true,    
-//             seed: 42
-//         });     
-//         res.json(response.data); 
-//     }
-//     catch (error){
-//         console.log("Error: ", error);
-//     }
-// });
-
 app.post("/askGPT", async (req, res) => {
-    const { interaction } = req.body; 
+    const { interaction, sessionId } = req.body; 
 
+    // Initialize or get existing message history for this session
+    if (!messageHistories.has(sessionId)) {
+        messageHistories.set(sessionId, [{ role: "system", content: information }]);
+    }
+    
+    const messages = messageHistories.get(sessionId)!;
     messages.push(interaction);
 
     try {
@@ -57,21 +45,28 @@ app.post("/askGPT", async (req, res) => {
             store: true,
             model: "gpt-4o-mini",
             messages: messages
-            }, {
+        }, {
             headers: {
                 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
                 'Content-Type': 'application/json'
             }
-            });
+        });
 
-            const messageContent = completion.choices[0];
-            console.log(completion.choices)
-            res.json({ message: messageContent });
+        const messageContent = completion.choices[0];
+        console.log(completion.choices);
+        res.json({ message: messageContent });
     }
-    catch (error){
+    catch (error) {
         console.log("Error: ", error);
+        res.status(500).json({ error: "Failed to process request" });
     }
 });
 
+// Add a new endpoint to clear messages for a specific session
+app.post("/clearMessages", (req, res) => {
+    const { sessionId } = req.body;
+    messageHistories.delete(sessionId);
+    res.status(200).json({ message: "Messages cleared successfully" });
+});
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
