@@ -129,8 +129,6 @@ const App = () => {
 
       bodyContent = addTailwindClasses(bodyContent);
 
-      console.log(bodyContent);
-
       setMessages(prev => [...prev, { text: bodyContent, sender: 'ai' }]);
       setIsTyping(true);
     } catch (error) {
